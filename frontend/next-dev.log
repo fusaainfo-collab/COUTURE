@@ -1,0 +1,102 @@
+
+> atelier-couture-erp-web@0.1.0 dev
+> next dev -H 127.0.0.1 -p 3001
+
+   ▲ Next.js 15.5.18
+   - Local:        http://127.0.0.1:3001
+   - Network:      http://127.0.0.1:3001
+
+ ✓ Starting...
+ ✓ Ready in 3.9s
+ ○ Compiling /galerie ...
+ ✓ Compiled /galerie in 8.2s (673 modules)
+ GET /galerie 200 in 9458ms
+ ○ Compiling /rapports ...
+ ✓ Compiled /rapports in 2.1s (688 modules)
+ GET /rapports 200 in 2743ms
+ ○ Compiling /notifications ...
+ ✓ Compiled /notifications in 627ms (687 modules)
+ GET /notifications 200 in 933ms
+ ○ Compiling /statistiques ...
+ ✓ Compiled /statistiques in 526ms (698 modules)
+ GET /statistiques 200 in 1175ms
+ ○ Compiling /administration ...
+ ✓ Compiled /administration in 3.5s (1427 modules)
+ GET /administration 200 in 3943ms
+ ○ Compiling /parametres ...
+ ✓ Compiled /parametres in 1247ms (1436 modules)
+ GET /parametres 200 in 2026ms
+ GET /statistiques 200 in 210ms
+ GET /statistiques 200 in 209ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 2.7s (1418 modules)
+ GET /dashboard 200 in 3405ms
+ ○ Compiling /clients ...
+ ✓ Compiled /clients in 1078ms (1427 modules)
+ GET /clients 200 in 1313ms
+ ○ Compiling /commandes ...
+ ✓ Compiled /commandes in 1117ms (1436 modules)
+ GET /commandes 200 in 1459ms
+ ○ Compiling /mesures ...
+ ✓ Compiled /mesures in 911ms (1445 modules)
+ GET /mesures 200 in 1103ms
+ ○ Compiling /rendez-vous ...
+ ✓ Compiled /rendez-vous in 1028ms (1454 modules)
+ GET /rendez-vous 200 in 1180ms
+ ○ Compiling /paiements ...
+ ✓ Compiled /paiements in 1067ms (1463 modules)
+ GET /paiements 200 in 1258ms
+ ✓ Compiled in 4s (1465 modules)
+ GET /paiements 200 in 274ms
+ ○ Compiling /galerie ...
+ ✓ Compiled /galerie in 702ms (795 modules)
+ GET /galerie 200 in 936ms
+ GET /galerie 200 in 721ms
+ ✓ Compiled in 2.1s (1469 modules)
+ ✓ Compiled in 993ms (680 modules)
+ GET /galerie 200 in 1000ms
+ GET /galerie 200 in 356ms
+ GET /galerie 200 in 561ms
+ ✓ Compiled in 2.6s (1466 modules)
+ GET /galerie 200 in 437ms
+ ✓ Compiled in 2.4s (1466 modules)
+ GET /galerie 200 in 1510ms
+ GET /galerie 200 in 44ms
+ ✓ Compiled in 903ms (677 modules)
+ GET /galerie 200 in 63ms
+ ✓ Compiled in 783ms (677 modules)
+ ✓ Compiled in 335ms (677 modules)
+ GET /galerie 200 in 334ms
+ GET /galerie 200 in 79ms
+ GET /galerie 200 in 660ms
+ GET /dashboard 200 in 109ms
+ ○ Compiling /mesures ...
+ ✓ Compiled /mesures in 1960ms (795 modules)
+ GET /mesures 200 in 2232ms
+ ○ Compiling /parametres ...
+ ✓ Compiled /parametres in 4.8s (1484 modules)
+ GET /parametres 200 in 5332ms
+ GET /parametres 200 in 167ms
+ GET /dashboard 200 in 915ms
+ GET /clients 200 in 276ms
+ GET /commandes 200 in 651ms
+ GET /mesures 200 in 443ms
+ ○ Compiling /rendez-vous ...
+ ✓ Compiled /rendez-vous in 2.6s (793 modules)
+ GET /rendez-vous 200 in 3039ms
+ ○ Compiling /galerie ...
+ ✓ Compiled /galerie in 723ms (803 modules)
+ GET /galerie 200 in 1136ms
+ ✓ Compiled in 2.8s (1470 modules)
+ GET /galerie 200 in 155ms
+ ✓ Compiled in 1418ms (1470 modules)
+ GET /galerie 200 in 158ms
+ ✓ Compiled in 780ms (681 modules)
+ GET /galerie 200 in 76ms
+ ✓ Compiled in 303ms (681 modules)
+ GET /galerie 200 in 81ms
+ ✓ Compiled in 277ms (681 modules)
+ GET /galerie 200 in 85ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 2.3s (1471 modules)
+ GET /login 200 in 3601ms
