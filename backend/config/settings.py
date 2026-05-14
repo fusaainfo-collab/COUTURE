@@ -1,5 +1,7 @@
 import os
+import sys
 from pathlib import Path
+from urllib.parse import parse_qsl, unquote, urlparse
 
 from corsheaders.defaults import default_headers
 from dotenv import load_dotenv
@@ -11,6 +13,37 @@ load_dotenv(BASE_DIR / ".env")
 
 def csv_env(name, default=""):
     return [item.strip() for item in os.getenv(name, default).split(",") if item.strip()]
+
+
+def is_migration_command():
+    migration_commands = {"dbshell", "migrate", "showmigrations", "sqlmigrate"}
+    return any(command in migration_commands for command in sys.argv[1:])
+
+
+def database_from_url(value):
+    parsed = urlparse(value)
+    if parsed.scheme not in ["postgres", "postgresql"]:
+        raise ValueError("DATABASE_URL doit utiliser postgres:// ou postgresql://.")
+
+    query = dict(parse_qsl(parsed.query))
+    options = {"sslmode": query.get("sslmode", "require")}
+    uses_pgbouncer = query.get("pgbouncer", "").lower() == "true"
+
+    config = {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": unquote(parsed.path.lstrip("/") or "postgres"),
+        "USER": unquote(parsed.username or ""),
+        "PASSWORD": unquote(parsed.password or ""),
+        "HOST": parsed.hostname or "localhost",
+        "PORT": str(parsed.port or 5432),
+        "OPTIONS": options,
+    }
+
+    if uses_pgbouncer:
+        config["CONN_MAX_AGE"] = 0
+        config["DISABLE_SERVER_SIDE_CURSORS"] = True
+
+    return config
 
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-change-me")
@@ -81,8 +114,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
+DATABASE_URL = os.getenv("DATABASE_URL", "")
+DIRECT_URL = os.getenv("DIRECT_URL", "")
+ACTIVE_DATABASE_URL = DIRECT_URL if is_migration_command() and DIRECT_URL else DATABASE_URL
 POSTGRES_DB = os.getenv("POSTGRES_DB", "")
-if POSTGRES_DB:
+if ACTIVE_DATABASE_URL:
+    DATABASES = {
+        "default": database_from_url(ACTIVE_DATABASE_URL)
+    }
+elif POSTGRES_DB:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",

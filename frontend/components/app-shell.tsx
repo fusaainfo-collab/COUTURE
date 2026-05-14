@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   BarChart3,
   Bell,
+  Braces,
   CalendarDays,
   ClipboardList,
   CreditCard,
@@ -68,6 +69,7 @@ const navigation: Array<{
   { href: "/messages", label: "Messages", icon: MessageCircle, badgeRoute: "/messages" },
   { href: "/rapports", label: "Rapports", icon: WalletCards, hideForClient: true },
   { href: "/administration", label: "Administration", icon: ShieldCheck, hideForClient: true },
+  { href: "/gestion-api", label: "Gestion des API", icon: Braces, adminOnly: true, hideForClient: true },
   { href: "/parametres", label: "Parametres", icon: Settings, adminOnly: true }
 ];
 
@@ -86,6 +88,7 @@ const clientBlockedRoutes = new Set([
   "/notifications",
   "/rapports",
   "/administration",
+  "/gestion-api",
   "/parametres"
 ]);
 
