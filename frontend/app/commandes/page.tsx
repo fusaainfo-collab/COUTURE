@@ -90,7 +90,7 @@ const initialForm = {
 };
 
 export default function CommandesPage() {
-  const isClient = isClientUser(getStoredUser());
+  const [isClient, setIsClient] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [measurementProfiles, setMeasurementProfiles] = useState<MeasurementProfile[]>([]);
@@ -103,6 +103,10 @@ export default function CommandesPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const deferredQuery = useDeferredValue(query);
+
+  useEffect(() => {
+    setIsClient(isClientUser(getStoredUser()));
+  }, []);
 
   async function loadData() {
     setLoading(true);

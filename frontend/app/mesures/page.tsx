@@ -107,7 +107,7 @@ function createInitialForm() {
 }
 
 export default function MesuresPage() {
-  const isClient = isClientUser(getStoredUser());
+  const [isClient, setIsClient] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
   const [profiles, setProfiles] = useState<MeasurementProfile[]>([]);
   const [query, setQuery] = useState("");
@@ -119,6 +119,10 @@ export default function MesuresPage() {
   const formRef = useRef<HTMLFormElement | null>(null);
   const clientSelectRef = useRef<HTMLSelectElement | null>(null);
   const deferredQuery = useDeferredValue(query);
+
+  useEffect(() => {
+    setIsClient(isClientUser(getStoredUser()));
+  }, []);
 
   async function loadData() {
     setLoading(true);

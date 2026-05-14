@@ -53,7 +53,7 @@ export default function MessagesPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const role = getStoredUser()?.profile?.role ?? "manager";
+  const [role, setRole] = useState("manager");
   const isClient = role === "client";
   const canChooseClient = role === "admin" || role === "manager";
   const activeThread = useMemo(
@@ -84,6 +84,7 @@ export default function MessagesPage() {
   }
 
   useEffect(() => {
+    setRole(getStoredUser()?.profile?.role ?? "manager");
     loadMessages();
   }, []);
 

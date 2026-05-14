@@ -38,32 +38,44 @@ import {
   isAdminUser,
   setWorkshopId
 } from "@/lib/api";
+import type { StoredUser } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+
+type BadgeRoute = "/messages" | "/mesures" | "/rendez-vous" | "/paiements";
+type BadgeCounts = Partial<Record<BadgeRoute, number>>;
 
 const navigation: Array<{
   href: Route;
   label: string;
   icon: LucideIcon;
   adminOnly?: boolean;
+  badgeRoute?: BadgeRoute;
   clientLabel?: string;
   hideForClient?: boolean;
 }> = [
   { href: "/dashboard", label: "Dashboard", clientLabel: "Mon suivi", icon: LayoutDashboard },
   { href: "/clients", label: "Clients", icon: Users, hideForClient: true },
   { href: "/commandes", label: "Commandes", clientLabel: "Mes commandes", icon: ClipboardList },
-  { href: "/mesures", label: "Mesures", clientLabel: "Mes mesures", icon: Ruler },
-  { href: "/rendez-vous", label: "Rendez-vous", clientLabel: "Mes rendez-vous", icon: CalendarDays },
+  { href: "/mesures", label: "Mesures", clientLabel: "Mes mesures", icon: Ruler, badgeRoute: "/mesures" },
+  { href: "/rendez-vous", label: "Rendez-vous", clientLabel: "Mes rendez-vous", icon: CalendarDays, badgeRoute: "/rendez-vous" },
   { href: "/calendrier", label: "Calendrier", icon: CalendarDays, hideForClient: true },
   { href: "/tailleurs", label: "Tailleurs", icon: UserRoundCog, hideForClient: true },
-  { href: "/paiements", label: "Paiements", clientLabel: "Mes paiements", icon: CreditCard },
+  { href: "/paiements", label: "Paiements", clientLabel: "Mes paiements", icon: CreditCard, badgeRoute: "/paiements" },
   { href: "/statistiques", label: "Statistiques", icon: BarChart3, hideForClient: true },
   { href: "/galerie", label: "Galerie", clientLabel: "Modeles", icon: GalleryHorizontalEnd },
   { href: "/notifications", label: "Notifications", icon: Bell, hideForClient: true },
-  { href: "/messages", label: "Messages", icon: MessageCircle },
+  { href: "/messages", label: "Messages", icon: MessageCircle, badgeRoute: "/messages" },
   { href: "/rapports", label: "Rapports", icon: WalletCards, hideForClient: true },
   { href: "/administration", label: "Administration", icon: ShieldCheck, hideForClient: true },
   { href: "/parametres", label: "Parametres", icon: Settings, adminOnly: true }
+];
+
+const badgeSources: Array<{ route: BadgeRoute; endpoint: string }> = [
+  { route: "/messages", endpoint: "/messages/" },
+  { route: "/mesures", endpoint: "/mesures/" },
+  { route: "/rendez-vous", endpoint: "/rendez-vous/" },
+  { route: "/paiements", endpoint: "/paiements/" }
 ];
 
 const clientBlockedRoutes = new Set([
@@ -91,6 +103,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState("Gerant");
   const [isAdmin, setIsAdmin] = useState(false);
   const [userRole, setUserRole] = useState("manager");
+  const [badgeUserKey, setBadgeUserKey] = useState("");
+  const [menuBadges, setMenuBadges] = useState<BadgeCounts>({});
   const [workshops, setWorkshops] = useState<Workshop[]>([]);
   const [activeWorkshopId, setActiveWorkshopId] = useState("");
   const activeWorkshop = workshops.find((workshop) => String(workshop.id) === activeWorkshopId);
@@ -111,6 +125,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       setUser(currentUser.full_name ?? currentUser.username ?? "Gerant");
       setIsAdmin(isAdminUser(currentUser));
       setUserRole(role);
+      setBadgeUserKey(getBadgeUserKey(currentUser));
 
       if (role === "client" && clientBlockedRoutes.has(pathname)) {
         router.replace("/dashboard");
@@ -134,6 +149,33 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         setWorkshops([]);
       });
   }, [pathname, router]);
+
+  useEffect(() => {
+    if (!getToken() || !badgeUserKey) return;
+
+    const workshopScope = activeWorkshopId || getWorkshopId() || "all";
+    markRouteSeen(pathname, badgeUserKey, workshopScope);
+
+    let cancelled = false;
+    Promise.all(
+      badgeSources.map(async (source) => {
+        try {
+          const seenAt = getRouteSeenAt(source.route, badgeUserKey, workshopScope);
+          const payload = await apiFetch<ApiList<Record<string, unknown>>>(source.endpoint);
+          return [source.route, countNewItems(source.route, payload.results, seenAt, userRole)] as const;
+        } catch {
+          return [source.route, 0] as const;
+        }
+      })
+    ).then((entries) => {
+      if (cancelled) return;
+      setMenuBadges(Object.fromEntries(entries) as BadgeCounts);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeWorkshopId, badgeUserKey, pathname, userRole]);
 
   function logout() {
     clearSession();
@@ -177,6 +219,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {visibleNavigation.map((item) => {
             const active = pathname === item.href;
             const Icon = item.icon;
+            const badgeCount = !active && item.badgeRoute ? menuBadges[item.badgeRoute] ?? 0 : 0;
             return (
               <Link
                 key={item.href}
@@ -190,7 +233,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 )}
               >
                 <Icon size={18} />
-                <span>{isClient && item.clientLabel ? item.clientLabel : item.label}</span>
+                <span className="min-w-0 flex-1 truncate">{isClient && item.clientLabel ? item.clientLabel : item.label}</span>
+                {badgeCount > 0 ? (
+                  <span
+                    className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full border border-red-300/40 bg-red-500/20 px-1.5 text-[11px] font-semibold leading-none text-red-100"
+                    title={`${badgeCount} nouveau${badgeCount > 1 ? "x" : ""}`}
+                  >
+                    {formatMenuBadgeCount(badgeCount)}
+                  </span>
+                ) : null}
               </Link>
             );
           })}
@@ -268,4 +319,67 @@ function sessionLabel(role: string, isAdmin: boolean) {
   if (role === "client") return "Espace client";
   if (role === "tailor") return "Espace tailleur";
   return "Session atelier";
+}
+
+function getBadgeUserKey(user: StoredUser) {
+  return user.id ? `id-${user.id}` : `user-${user.username ?? "unknown"}`;
+}
+
+function getSeenStorageKey(route: BadgeRoute, userKey: string, workshopScope: string) {
+  return `atelier_seen:${userKey}:${workshopScope}:${route}`;
+}
+
+function isBadgeRoute(value: string): value is BadgeRoute {
+  return badgeSources.some((source) => source.route === value);
+}
+
+function getRouteSeenAt(route: BadgeRoute, userKey: string, workshopScope: string) {
+  if (typeof window === "undefined") return 0;
+  const rawValue = window.localStorage.getItem(getSeenStorageKey(route, userKey, workshopScope));
+  const parsedValue = rawValue ? Number(rawValue) : 0;
+  return Number.isFinite(parsedValue) ? parsedValue : 0;
+}
+
+function markRouteSeen(path: string, userKey: string, workshopScope: string) {
+  if (typeof window === "undefined" || !isBadgeRoute(path)) return;
+  window.localStorage.setItem(getSeenStorageKey(path, userKey, workshopScope), String(Date.now()));
+}
+
+function countNewItems(route: BadgeRoute, items: Record<string, unknown>[], seenAt: number, userRole: string) {
+  if (route === "/messages") {
+    return items.reduce<number>((count: number, thread: Record<string, unknown>) => {
+      const messagesValue = thread["messages"];
+      const messages = Array.isArray(messagesValue) ? messagesValue.filter(isRecord) : [];
+      if (messages.length === 0) {
+        return count + (getItemTimestamp(thread) > seenAt ? 1 : 0);
+      }
+
+      return (
+        count +
+        messages.filter((message) => {
+          const senderRole = String(message.sender_role ?? "");
+          return senderRole !== userRole && getItemTimestamp(message) > seenAt;
+        }).length
+      );
+    }, 0);
+  }
+
+  return items.filter((item) => getItemTimestamp(item) > seenAt).length;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === "object");
+}
+
+function getItemTimestamp(item: Record<string, unknown>): number {
+  const candidates = [item.updated_at, item.created_at, item.paid_at, item.start_at];
+  return candidates.reduce<number>((latest, value) => {
+    if (typeof value !== "string") return latest;
+    const parsed = Date.parse(value);
+    return Number.isFinite(parsed) ? Math.max(latest, parsed) : latest;
+  }, 0);
+}
+
+function formatMenuBadgeCount(count: number) {
+  return count > 99 ? "99+" : String(count);
 }

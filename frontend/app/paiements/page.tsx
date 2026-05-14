@@ -53,7 +53,7 @@ const initialForm = {
 };
 
 export default function PaiementsPage() {
-  const isClient = isClientUser(getStoredUser());
+  const [isClient, setIsClient] = useState(false);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -66,6 +66,10 @@ export default function PaiementsPage() {
   const formRef = useRef<HTMLFormElement | null>(null);
   const clientRef = useRef<HTMLSelectElement | null>(null);
   const deferredQuery = useDeferredValue(query);
+
+  useEffect(() => {
+    setIsClient(isClientUser(getStoredUser()));
+  }, []);
 
   async function loadData() {
     setLoading(true);

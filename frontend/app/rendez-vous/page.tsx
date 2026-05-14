@@ -79,7 +79,7 @@ const initialForm = {
 };
 
 export default function RendezVousPage() {
-  const isClient = isClientUser(getStoredUser());
+  const [isClient, setIsClient] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
   const [tailors, setTailors] = useState<Tailor[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -92,6 +92,10 @@ export default function RendezVousPage() {
   const formRef = useRef<HTMLFormElement | null>(null);
   const clientSelectRef = useRef<HTMLSelectElement | null>(null);
   const deferredQuery = useDeferredValue(query);
+
+  useEffect(() => {
+    setIsClient(isClientUser(getStoredUser()));
+  }, []);
 
   async function loadData() {
     setLoading(true);

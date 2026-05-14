@@ -54,7 +54,7 @@ const initialForm = {
 };
 
 export default function Page() {
-  const isClient = isClientUser(getStoredUser());
+  const [isClient, setIsClient] = useState(false);
   const [patterns, setPatterns] = useState<PatternItem[]>([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -66,6 +66,10 @@ export default function Page() {
   const [form, setForm] = useState(initialForm);
   const [editingId, setEditingId] = useState<number | null>(null);
   const deferredQuery = useDeferredValue(query);
+
+  useEffect(() => {
+    setIsClient(isClientUser(getStoredUser()));
+  }, []);
 
   async function loadPatterns() {
     setLoading(true);
