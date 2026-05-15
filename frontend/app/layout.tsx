@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Atelier Couture ERP",
-  description: "Gestion moderne d'un atelier de couture haut de gamme"
+  description: "Gestion d'un atelier de couture"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -14,4 +14,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
-

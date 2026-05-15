@@ -75,7 +75,7 @@ export default function LoginPage() {
           </span>
           <div>
             <p className="text-sm font-semibold">Atelier Couture</p>
-            <p className="text-xs text-stone-500">Administration premium</p>
+            <p className="text-xs text-stone-500">Espace atelier</p>
           </div>
         </div>
 
@@ -85,12 +85,12 @@ export default function LoginPage() {
           transition={{ duration: 0.45 }}
           className="max-w-2xl py-12"
         >
-          <p className="text-sm font-medium uppercase text-gold">ERP couture haut de gamme</p>
+          <p className="text-sm font-medium uppercase text-gold">Gestion atelier</p>
           <h1 className="mt-5 max-w-xl text-4xl font-semibold leading-tight text-ivory sm:text-5xl">
-            Pilotez l'atelier avec precision, vitesse et elegance.
+            Suivez les commandes, les clients et les paiements.
           </h1>
           <p className="mt-5 max-w-lg text-base leading-7 text-stone-400">
-            Clients, mesures, commandes, paiements et production sont reunis dans une seule console fluide.
+            Connectez-vous pour acceder aux informations de votre atelier.
           </p>
         </motion.div>
 

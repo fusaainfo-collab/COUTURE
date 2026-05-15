@@ -149,7 +149,7 @@ export default function TailleursPage() {
               <div>
                 <h1 className="text-3xl font-semibold">Tailleurs</h1>
                 <p className="mt-1 max-w-3xl text-sm leading-6 text-stone-400">
-                  Profils tailleurs avec specialites, disponibilite, charge et score qualite.
+                  Suivi des tailleurs, disponibilites et charge de travail.
                 </p>
               </div>
             </div>

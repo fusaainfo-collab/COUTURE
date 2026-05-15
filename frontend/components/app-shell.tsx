@@ -206,7 +206,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </span>
             <span>
               <span className="block text-sm font-semibold text-ivory">{activeWorkshop?.name ?? "Atelier Couture"}</span>
-              <span className="block text-xs text-stone-500">ERP premium</span>
+              <span className="block text-xs text-stone-500">Gestion atelier</span>
             </span>
           </Link>
           <button

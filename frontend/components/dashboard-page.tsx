@@ -201,7 +201,7 @@ export function DashboardPage() {
               <Badge tone="gold">{data.scope?.role_label ?? "Atelier"}</Badge>
               <Badge tone="neutral">{data.scope?.workshop ?? "Perimetre actif"}</Badge>
             </div>
-            <h1 className="mt-4 text-3xl font-semibold text-ivory">{data.scope?.title ?? "Dashboard intelligent"}</h1>
+            <h1 className="mt-4 text-3xl font-semibold text-ivory">{data.scope?.title ?? "Tableau de bord"}</h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-400">
               {data.scope?.subtitle ??
                 "Vue unifiee des commandes, paiements, clients VIP, alertes et performances de production."}
@@ -274,7 +274,7 @@ export function DashboardPage() {
 
           <div className="rounded-lg border border-gold/30 bg-gold/[0.075] p-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">{data.sections?.alerts_title ?? "Alertes intelligentes"}</h2>
+              <h2 className="text-lg font-semibold">{data.sections?.alerts_title ?? "Alertes"}</h2>
               <CalendarClock size={18} className="text-gold" />
             </div>
             <div className="mt-4 space-y-3">

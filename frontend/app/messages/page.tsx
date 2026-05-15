@@ -156,7 +156,7 @@ export default function MessagesPage() {
                 <p className="mt-1 max-w-3xl text-sm leading-6 text-stone-400">
                   {isClient
                     ? "Ecrivez a l'atelier et suivez les reponses liees a vos commandes, paiements ou rendez-vous."
-                    : "Conversations suivies entre les clients et l'atelier actif."}
+                    : "Messages entre l'atelier et les clients."}
                 </p>
               </div>
             </div>

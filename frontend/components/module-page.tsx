@@ -173,7 +173,7 @@ export function ModulePage({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <Badge tone={live ? "green" : "gold"}>{live ? "API connectee" : "Structure prete"}</Badge>
-              <Badge tone="neutral">ERP couture</Badge>
+              <Badge tone="neutral">Atelier</Badge>
             </div>
             <div className="mt-4 flex items-center gap-3">
               <span className="flex h-11 w-11 items-center justify-center rounded-lg border border-gold/35 bg-gold/12 text-gold">
