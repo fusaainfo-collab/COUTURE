@@ -189,17 +189,17 @@ export default function StatistiquesPage() {
             <div className="mt-5 grid gap-4">
               <label className="text-sm text-stone-300">
                 Indicateur
-                <input ref={labelRef} className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45" value={form.label} onChange={(event) => setForm((current) => ({ ...current, label: event.target.value }))} placeholder="Ex: Satisfaction client" required />
+                <input ref={labelRef} className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45" value={form.label} onChange={(event) => setForm((current) => ({ ...current, label: event.target.value }))} placeholder="Libelle" required />
               </label>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="text-sm text-stone-300">
                   Valeur
-                  <input className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45" value={form.value} onChange={(event) => setForm((current) => ({ ...current, value: event.target.value }))} placeholder="Ex: 4.8/5" required />
+                  <input className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45" value={form.value} onChange={(event) => setForm((current) => ({ ...current, value: event.target.value }))} placeholder="Valeur" required />
                 </label>
                 <label className="text-sm text-stone-300">
                   Evolution
-                  <input className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45" value={form.evolution} onChange={(event) => setForm((current) => ({ ...current, evolution: event.target.value }))} placeholder="Ex: +12%" />
+                  <input className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45" value={form.evolution} onChange={(event) => setForm((current) => ({ ...current, evolution: event.target.value }))} placeholder="Evolution" />
                 </label>
               </div>
 

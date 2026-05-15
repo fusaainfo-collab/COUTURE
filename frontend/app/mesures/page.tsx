@@ -406,7 +406,7 @@ export default function MesuresPage() {
                       step="0.1"
                       value={form.values[field.key] ?? ""}
                       onChange={(event) => updateMeasurementValue(field.key, event.target.value)}
-                      placeholder={`Ex: 42 ${form.unit || "cm"}`}
+                      placeholder={`Valeur ${form.unit || "cm"}`}
                     />
                   </label>
                 ))}

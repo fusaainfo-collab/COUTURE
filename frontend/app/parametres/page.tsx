@@ -288,7 +288,7 @@ export default function ParametresPage() {
                   className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45"
                   value={form.name}
                   onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
-                  placeholder="Ex: Atelier Royal Couture"
+                  placeholder="Nom de l'atelier"
                   required
                 />
               </label>
@@ -341,7 +341,7 @@ export default function ParametresPage() {
                         className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45"
                         value={form.managerFullName}
                         onChange={(event) => setForm((current) => ({ ...current, managerFullName: event.target.value }))}
-                        placeholder="Ex: Amina Diallo"
+                        placeholder="Nom complet"
                       />
                     </label>
                     <div className="grid gap-4 md:grid-cols-2">
@@ -351,7 +351,7 @@ export default function ParametresPage() {
                           className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45"
                           value={form.managerUsername}
                           onChange={(event) => setForm((current) => ({ ...current, managerUsername: event.target.value }))}
-                          placeholder="gerant-niamey"
+                          placeholder="Identifiant utilisateur"
                         />
                       </label>
                       <label className="text-sm text-stone-300">

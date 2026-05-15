@@ -212,7 +212,7 @@ export default function ClientsPage() {
                   className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45"
                   value={form.fullName}
                   onChange={(event) => setForm((current) => ({ ...current, fullName: event.target.value }))}
-                  placeholder="Ex: Mariam Abdou"
+                  placeholder="Nom complet"
                   required
                 />
               </label>
@@ -323,7 +323,7 @@ export default function ClientsPage() {
                     className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45"
                     value={form.username}
                     onChange={(event) => setForm((current) => ({ ...current, username: event.target.value }))}
-                    placeholder="client-mariam"
+                    placeholder="Identifiant client"
                   />
                 </label>
                 <label className="text-sm text-stone-300">

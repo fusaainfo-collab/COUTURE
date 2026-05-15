@@ -288,7 +288,7 @@ export default function Page() {
                   className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45"
                   value={form.name}
                   onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
-                  placeholder="Ex: Boubou royal brode"
+                  placeholder="Nom du modele"
                   required
                 />
               </label>

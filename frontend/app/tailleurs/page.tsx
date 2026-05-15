@@ -186,7 +186,7 @@ export default function TailleursPage() {
             <div className="mt-5 grid gap-4">
               <label className="text-sm text-stone-300">
                 Nom complet
-                <input ref={nameRef} className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45" value={form.fullName} onChange={(event) => setForm((current) => ({ ...current, fullName: event.target.value }))} placeholder="Ex: Fatou Ibrahim" required />
+                <input ref={nameRef} className="mt-2 h-11 w-full rounded-lg border border-line bg-ink/55 px-3 text-sm text-ivory outline-none focus:border-gold/45" value={form.fullName} onChange={(event) => setForm((current) => ({ ...current, fullName: event.target.value }))} placeholder="Nom complet" required />
               </label>
 
               <div className="grid gap-4 md:grid-cols-2">

@@ -11,13 +11,12 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { apiFetch, ApiList } from "@/lib/api";
-import { moduleRows } from "@/lib/mock-data";
 import { formatDate, formatMoney } from "@/lib/utils";
 import { AppShell } from "@/components/app-shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-type ModuleKind = "clients" | "commandes" | "mesures" | "tailleurs" | "paiements" | "galerie" | "standard";
+type ModuleKind = "clients" | "commandes" | "mesures" | "tailleurs" | "paiements" | "galerie" | "users" | "standard";
 
 type ModulePageProps = {
   title: string;
@@ -26,9 +25,30 @@ type ModulePageProps = {
   kind?: ModuleKind;
   icon: LucideIcon;
   columns: string[];
-  fallbackRows?: string[][];
   highlights: { label: string; value: string; tone?: "neutral" | "gold" | "green" | "red" }[];
 };
+
+function readProfileRole(item: Record<string, unknown>) {
+  const profile = item.profile;
+  if (profile && typeof profile === "object" && "role" in profile) {
+    return String((profile as { role?: unknown }).role ?? "-");
+  }
+  return "-";
+}
+
+function readWorkshopNames(item: Record<string, unknown>) {
+  const workshops = item.workshops;
+  if (!Array.isArray(workshops) || workshops.length === 0) return "-";
+  return workshops
+    .map((workshop) => {
+      if (workshop && typeof workshop === "object" && "name" in workshop) {
+        return String((workshop as { name?: unknown }).name ?? "");
+      }
+      return "";
+    })
+    .filter(Boolean)
+    .join(", ");
+}
 
 function mapApiRows(kind: ModuleKind, items: Record<string, unknown>[]) {
   if (kind === "clients") {
@@ -85,6 +105,15 @@ function mapApiRows(kind: ModuleKind, items: Record<string, unknown>[]) {
     ]);
   }
 
+  if (kind === "users") {
+    return items.map((item) => [
+      String(item.full_name || item.username || "-"),
+      readProfileRole(item),
+      readWorkshopNames(item),
+      item.is_active === false ? "Inactif" : "Actif"
+    ]);
+  }
+
   return [];
 }
 
@@ -95,24 +124,27 @@ export function ModulePage({
   kind = "standard",
   icon: Icon,
   columns,
-  fallbackRows,
   highlights
 }: ModulePageProps) {
   const [query, setQuery] = useState("");
-  const [rows, setRows] = useState<string[][]>(
-    fallbackRows ?? moduleRows[kind as keyof typeof moduleRows] ?? []
-  );
+  const [rows, setRows] = useState<string[][]>([]);
   const [live, setLive] = useState(false);
+  const [error, setError] = useState("");
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!endpoint) return;
+    setError("");
     apiFetch<ApiList<Record<string, unknown>>>(endpoint)
       .then((payload) => {
         setRows(mapApiRows(kind, payload.results));
         setLive(true);
       })
-      .catch(() => setLive(false));
+      .catch((loadError) => {
+        setLive(false);
+        setRows([]);
+        setError(loadError instanceof Error ? loadError.message : "Chargement impossible.");
+      });
   }, [endpoint, kind]);
 
   const filteredRows = useMemo(() => {
@@ -152,6 +184,11 @@ export function ModulePage({
                 <p className="mt-1 max-w-3xl text-sm leading-6 text-stone-400">{subtitle}</p>
               </div>
             </div>
+            {error ? (
+              <div className="mt-3 rounded-lg border border-red-400/35 bg-red-500/12 px-3 py-2 text-sm text-red-100">
+                {error}
+              </div>
+            ) : null}
           </div>
           <div className="flex flex-wrap gap-2">
             <Button variant="secondary" onClick={() => searchInputRef.current?.focus()}>
@@ -165,6 +202,7 @@ export function ModulePage({
           </div>
         </section>
 
+        {highlights.length ? (
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {highlights.map((item) => (
             <div key={item.label} className="rounded-lg border border-line bg-ivory/[0.055] p-4">
@@ -176,6 +214,7 @@ export function ModulePage({
             </div>
           ))}
         </section>
+        ) : null}
 
         <section className="rounded-lg border border-line bg-ivory/[0.055] shadow-premium">
           <div className="flex flex-col gap-3 border-b border-line p-4 lg:flex-row lg:items-center lg:justify-between">
@@ -207,7 +246,6 @@ export function ModulePage({
                       {column}
                     </th>
                   ))}
-                  <th className="px-4 py-3 text-right font-medium">Etat</th>
                 </tr>
               </thead>
               <tbody>
@@ -224,13 +262,15 @@ export function ModulePage({
                         {cellIndex === 0 ? <span className="font-medium text-ivory">{cell}</span> : cell}
                       </td>
                     ))}
-                    <td className="px-4 py-4 text-right">
-                      <Badge tone={index % 3 === 0 ? "gold" : "green"}>{index % 3 === 0 ? "A suivre" : "OK"}</Badge>
-                    </td>
                   </motion.tr>
                 ))}
               </tbody>
             </table>
+            {filteredRows.length === 0 ? (
+              <div className="px-4 py-14 text-center text-sm text-stone-500">
+                Aucune donnee disponible pour ce module.
+              </div>
+            ) : null}
           </div>
         </section>
       </div>

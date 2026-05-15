@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("admin123");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [ready, setReady] = useState(false);
@@ -113,8 +113,8 @@ export default function LoginPage() {
         >
           <div>
             <p className="text-sm text-stone-500">Connexion securisee</p>
-            <h2 className="mt-2 text-2xl font-semibold">Espace admin</h2>
-            <p className="mt-2 text-sm text-stone-500">Interface web locale sur http://localhost:3001.</p>
+            <h2 className="mt-2 text-2xl font-semibold">Connexion</h2>
+            <p className="mt-2 text-sm text-stone-500">Entrez vos identifiants pour acceder a votre espace.</p>
           </div>
 
           <label className="mt-8 block text-sm text-stone-300">
@@ -155,9 +155,6 @@ export default function LoginPage() {
             <ArrowRight size={17} />
           </Button>
 
-          <div className="mt-4 rounded-lg border border-line bg-ink/45 px-3 py-3 text-sm text-stone-400">
-            Identifiants admin: <span className="text-ivory">admin</span> / <span className="text-ivory">admin123</span>
-          </div>
         </motion.form>
       </section>
     </main>

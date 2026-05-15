@@ -16,7 +16,6 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 import { apiFetch } from "@/lib/api";
-import { dashboardFallback } from "@/lib/mock-data";
 import { formatDate, formatMoney } from "@/lib/utils";
 import { AppShell } from "@/components/app-shell";
 import { Badge } from "@/components/ui/badge";
@@ -95,7 +94,27 @@ type DashboardData = {
   }>;
 };
 
-const fallbackData = dashboardFallback as DashboardData;
+const emptyDashboardData: DashboardData = {
+  stats: {
+    commandes_en_cours: 0,
+    commandes_urgentes: 0,
+    commandes_retard: 0,
+    revenus_jour: 0,
+    revenus_mois: 0,
+    depenses_mois: 0,
+    benefice_mois: 0,
+    clients_actifs: 0,
+    paiements_incomplets: 0
+  },
+  alertes: {
+    urgentes: [],
+    retards: [],
+    vip: []
+  },
+  tailleurs: [],
+  tendances_modeles: [],
+  activite_recente: []
+};
 
 const cardIcons: Record<DashboardCard["icon"], LucideIcon> = {
   alert: AlertTriangle,
@@ -107,7 +126,7 @@ const cardIcons: Record<DashboardCard["icon"], LucideIcon> = {
 };
 
 export function DashboardPage() {
-  const [data, setData] = useState<DashboardData>(fallbackData);
+  const [data, setData] = useState<DashboardData>(emptyDashboardData);
   const [live, setLive] = useState(false);
   const [error, setError] = useState("");
 
@@ -124,7 +143,7 @@ export function DashboardPage() {
       });
   }, []);
 
-  const fallbackCards = useMemo<DashboardCard[]>(
+  const metricCards = useMemo<DashboardCard[]>(
     () => [
       {
         label: "Commandes en cours",
@@ -161,7 +180,7 @@ export function DashboardPage() {
     [data]
   );
 
-  const cards = data.cartes?.length ? data.cartes : fallbackCards;
+  const cards = data.cartes?.length ? data.cartes : metricCards;
   const timeline = data.timeline ?? {
     title: "Revenus 7 jours",
     subtitle: "Encaissements reels du perimetre",
@@ -178,7 +197,7 @@ export function DashboardPage() {
         <section className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <Badge tone={live ? "green" : "gold"}>{live ? "API connectee" : "Mode demo"}</Badge>
+              <Badge tone={live ? "green" : "gold"}>{live ? "API connectee" : "En attente API"}</Badge>
               <Badge tone="gold">{data.scope?.role_label ?? "Atelier"}</Badge>
               <Badge tone="neutral">{data.scope?.workshop ?? "Perimetre actif"}</Badge>
             </div>
@@ -227,6 +246,9 @@ export function DashboardPage() {
                 {timeline.badge}
               </Badge>
             </div>
+            {timeline.points.length === 0 ? (
+              <EmptyState label="Aucune donnee de tendance disponible." />
+            ) : (
             <div className="mt-8 flex h-56 items-end gap-3">
               {timeline.points.map((item) => {
                 const numericValue = Number(item.value || 0);
@@ -247,6 +269,7 @@ export function DashboardPage() {
                 );
               })}
             </div>
+            )}
           </motion.div>
 
           <div className="rounded-lg border border-gold/30 bg-gold/[0.075] p-4">
