@@ -1,5 +1,17 @@
 function normalizeApiBaseUrl(value: string) {
-  return value.replace(/\/+$/, "");
+  const trimmedValue = value.replace(/\/+$/, "");
+
+  try {
+    const url = new URL(trimmedValue);
+    if (!url.pathname || url.pathname === "/") {
+      url.pathname = "/api/v1";
+      return url.toString().replace(/\/+$/, "");
+    }
+  } catch {
+    // Keep the raw value for local/dev values that URL cannot parse.
+  }
+
+  return trimmedValue;
 }
 
 function getLocalApiHost(hostname: string) {
@@ -160,7 +172,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
       cache: "no-store"
     });
   } catch {
-    throw new Error(`Serveur API indisponible sur ${apiBaseUrl}. Verifiez que Django est lance sur le port 8000.`);
+    throw new Error(`Serveur API indisponible sur ${apiBaseUrl}. Verifiez l'URL API et les autorisations CORS.`);
   }
 
   if (response.status === 401) {

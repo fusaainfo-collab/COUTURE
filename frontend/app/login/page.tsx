@@ -49,7 +49,7 @@ export default function LoginPage() {
       router.replace("/dashboard");
     } catch (err) {
       if (err instanceof TypeError) {
-        setError(`Serveur API indisponible sur ${getApiBaseUrl()}. Verifiez que Django est lance sur le port 8000.`);
+        setError(`Serveur API indisponible sur ${getApiBaseUrl()}. Verifiez l'URL API et les autorisations CORS.`);
       } else {
         setError(err instanceof Error ? err.message : "Connexion impossible.");
       }

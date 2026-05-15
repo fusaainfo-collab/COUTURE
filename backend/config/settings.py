@@ -38,6 +38,18 @@ def render_allowed_hosts():
     return hosts
 
 
+def default_cors_origins():
+    return [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3001",
+        "http://localhost:3002",
+        "http://127.0.0.1:3002",
+        "https://couture-web.onrender.com",
+    ]
+
+
 def is_migration_command():
     migration_commands = {"dbshell", "migrate", "showmigrations", "sqlmigrate"}
     return any(command in migration_commands for command in sys.argv[1:])
@@ -187,9 +199,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS = csv_env(
-    "CORS_ALLOWED_ORIGINS",
-    "http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,http://localhost:3002,http://127.0.0.1:3002,https://couture-web.onrender.com",
+CORS_ALLOWED_ORIGINS = unique(
+    csv_env("CORS_ALLOWED_ORIGINS", ",".join(default_cors_origins()))
+    + default_cors_origins()
 )
 CORS_ALLOW_HEADERS = list(default_headers) + [
     "x-workshop-id",
