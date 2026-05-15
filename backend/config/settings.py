@@ -12,7 +12,30 @@ load_dotenv(BASE_DIR / ".env")
 
 
 def csv_env(name, default=""):
-    return [item.strip() for item in os.getenv(name, default).split(",") if item.strip()]
+    raw_value = os.getenv(name) or default
+    return [item.strip() for item in raw_value.split(",") if item.strip()]
+
+
+def unique(items):
+    return list(dict.fromkeys(item for item in items if item))
+
+
+def render_allowed_hosts():
+    hosts = []
+    render_hostname = os.getenv("RENDER_EXTERNAL_HOSTNAME", "")
+    render_url = os.getenv("RENDER_EXTERNAL_URL", "")
+    render_service_name = os.getenv("RENDER_SERVICE_NAME", "")
+
+    if render_hostname:
+        hosts.append(render_hostname)
+    if render_url:
+        parsed = urlparse(render_url)
+        if parsed.hostname:
+            hosts.append(parsed.hostname)
+    if render_service_name:
+        hosts.append(f"{render_service_name}.onrender.com")
+
+    return hosts
 
 
 def is_migration_command():
@@ -48,7 +71,10 @@ def database_from_url(value):
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-change-me")
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = csv_env("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver,.onrender.com")
+ALLOWED_HOSTS = unique(
+    csv_env("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver,.onrender.com")
+    + render_allowed_hosts()
+)
 
 
 DJANGO_APPS = [
