@@ -51,5 +51,5 @@ urlpatterns = [
     path("api/v1/", include(router.urls)),
 ]
 
-if settings.MEDIA_URL and settings.MEDIA_ROOT:
+if not getattr(settings, "CLOUDINARY_STORAGE_ENABLED", False) and settings.MEDIA_URL and settings.MEDIA_ROOT:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

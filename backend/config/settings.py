@@ -20,6 +20,23 @@ def unique(items):
     return list(dict.fromkeys(item for item in items if item))
 
 
+def cloudinary_credentials_available():
+    required_names = [
+        "CLOUDINARY_CLOUD_NAME",
+        "CLOUDINARY_API_KEY",
+        "CLOUDINARY_API_SECRET",
+    ]
+    return all(os.getenv(name) for name in required_names)
+
+
+def cloudinary_upload_prefix():
+    folder_parts = [
+        os.getenv("CLOUDINARY_UPLOAD_BASE_FOLDER", ""),
+        os.getenv("CLOUDINARY_UPLOAD_FOLDER", "couture"),
+    ]
+    return "/".join(part.strip("/") for part in folder_parts if part.strip("/"))
+
+
 def render_allowed_hosts():
     hosts = []
     render_hostname = os.getenv("RENDER_EXTERNAL_HOSTNAME", "")
@@ -83,6 +100,7 @@ def database_from_url(value):
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-change-me")
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+CLOUDINARY_STORAGE_ENABLED = cloudinary_credentials_available()
 ALLOWED_HOSTS = unique(
     csv_env("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver,.onrender.com")
     + render_allowed_hosts()
@@ -104,6 +122,8 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "drf_spectacular",
 ]
+if CLOUDINARY_STORAGE_ENABLED:
+    THIRD_PARTY_APPS = ["cloudinary_storage", "cloudinary"] + THIRD_PARTY_APPS
 
 LOCAL_APPS = [
     "apps.core",
@@ -196,6 +216,23 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+if CLOUDINARY_STORAGE_ENABLED:
+    CLOUDINARY_STORAGE = {
+        "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+        "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+        "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+        "SECURE": True,
+        "PREFIX": cloudinary_upload_prefix(),
+    }
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

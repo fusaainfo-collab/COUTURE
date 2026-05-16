@@ -1,6 +1,8 @@
 asgiref==3.11.1
 attrs==26.1.0
+cloudinary==1.44.2
 Django==5.2.14
+django-cloudinary-storage==0.3.0
 django-cors-headers==4.9.0
 djangorestframework==3.17.1
 drf-spectacular==0.29.0

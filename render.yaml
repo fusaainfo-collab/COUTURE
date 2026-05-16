@@ -14,6 +14,14 @@ services:
         value: couture-api.onrender.com,.onrender.com
       - key: CORS_ALLOWED_ORIGINS
         value: https://couture-web.onrender.com
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_UPLOAD_FOLDER
+        value: couture
   - type: web
     name: couture-web
     runtime: node
