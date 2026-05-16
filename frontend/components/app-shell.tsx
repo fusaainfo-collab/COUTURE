@@ -42,6 +42,7 @@ import {
 import type { StoredUser } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { PoweredByMask } from "@/components/powered-by-mask";
 
 type BadgeRoute = "/messages" | "/mesures" | "/rendez-vous" | "/paiements";
 type BadgeCounts = Partial<Record<BadgeRoute, number>>;
@@ -253,6 +254,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="mt-4 rounded-lg border border-line bg-ivory/[0.055] p-3">
           <div className="text-sm font-medium text-ivory">{user}</div>
           <div className="mt-1 text-xs text-stone-500">{sessionLabel(userRole, isAdmin)}</div>
+          <PoweredByMask className="mt-3" />
           <Button variant="ghost" className="mt-3 h-9 w-full justify-start px-2" onClick={logout}>
             <LogOut size={16} />
             Deconnexion
@@ -278,6 +280,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               />
             </div>
             <div className="ml-auto flex items-center gap-2">
+              <PoweredByMask className="hidden sm:block" />
               {workshops.length ? (
                 <select
                   className="hidden h-10 max-w-52 rounded-lg border border-line bg-ivory/[0.055] px-3 text-sm text-ivory outline-none focus:border-gold/45 md:block"

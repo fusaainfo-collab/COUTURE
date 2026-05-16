@@ -7,6 +7,7 @@ import { FormEvent, useEffect, useState } from "react";
 
 import { getApiBaseUrl, getToken, setStoredUser, setToken } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import { PoweredByMask } from "@/components/powered-by-mask";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -76,6 +77,7 @@ export default function LoginPage() {
           <div>
             <p className="text-sm font-semibold">Atelier Couture</p>
             <p className="text-xs text-stone-500">Espace atelier</p>
+            <PoweredByMask className="mt-2" />
           </div>
         </div>
 
@@ -155,6 +157,7 @@ export default function LoginPage() {
             <ArrowRight size={17} />
           </Button>
 
+          <PoweredByMask className="mt-5 text-center" />
         </motion.form>
       </section>
     </main>

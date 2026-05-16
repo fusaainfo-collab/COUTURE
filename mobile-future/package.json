@@ -1,0 +1,33 @@
+{
+  "name": "couture-sir-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
+    "prebuild:android": "expo prebuild --platform android",
+    "build:android:debug": "cd android && gradlew.bat assembleDebug",
+    "build:android:release": "cd android && gradlew.bat assembleRelease",
+    "build:android:cloud": "eas build -p android --profile preview",
+    "build:ios:cloud": "eas build -p ios --profile preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "expo": "55.0.24",
+    "expo-image-picker": "55.0.20",
+    "expo-secure-store": "55.0.14",
+    "expo-status-bar": "55.0.6",
+    "expo-system-ui": "~55.0.18",
+    "react": "19.2.0",
+    "react-native": "0.83.6"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "babel-preset-expo": "^55.0.21",
+    "typescript": "^5.7.2"
+  }
+}

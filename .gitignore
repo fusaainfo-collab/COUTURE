@@ -14,4 +14,6 @@ dist/
 coverage/
 media/
 staticfiles/
-
+mobile-future/builds/
+mobile-future/android/.gradle/
+mobile-future/android/app/build/

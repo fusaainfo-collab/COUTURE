@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "COUTURE SIR",
+    "slug": "couture-sir-mobile",
+    "scheme": "couturesir",
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#08090b",
+    "androidStatusBar": {
+      "backgroundColor": "#08090b",
+      "barStyle": "light-content",
+      "translucent": false
+    },
+    "androidNavigationBar": {
+      "backgroundColor": "#08090b",
+      "barStyle": "light-content"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.couturesir.mobile",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Autoriser l'app a choisir une photo pour importer un modele."
+      }
+    },
+    "android": {
+      "package": "com.couturesir.mobile",
+      "permissions": ["READ_MEDIA_IMAGES", "READ_EXTERNAL_STORAGE"]
+    },
+    "extra": {
+      "apiBaseUrl": "https://couture-api.onrender.com/api/v1",
+      "apiSchemaUrl": "https://couture-api.onrender.com/api/schema/?format=json",
+      "apiDocsUrl": "https://couture-api.onrender.com/api/docs/"
+    }
+  }
+}
